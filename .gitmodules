@@ -1,0 +1,42 @@
+[submodule "fdo-doip-b2share-adapter"]
+	path = fdo-doip-b2share-adapter
+	url = git@github.com:indiscale/fdo-doip-b2share-adapter.git
+[submodule "fdo-doip-request-models"]
+	path = fdo-doip-request-models
+	url = git@github.com:indiscale/fdo-doip-request-models.git
+[submodule "fdo-s3-doip-adapter"]
+	path = fdo-s3-doip-adapter
+	url = git@github.com:indiscale/fdo-s3-doip-adapter.git
+[submodule "fdo-testbed-jupyter-notebooks"]
+	path = fdo-testbed-jupyter-notebooks
+	url = git@github.com:indiscale/fdo-testbed-jupyter-notebooks.git
+[submodule "fdo-test-handle-system"]
+	path = fdo-test-handle-system
+	url = git@github.com:indiscale/fdo-test-handle-system.git
+[submodule "fdo-local-testbed"]
+	path = fdo-local-testbed
+	url = git@github.com:indiscale/fdo-local-testbed.git
+[submodule "fdo-edc-adapter"]
+	path = fdo-edc-adapter
+	url = git@github.com:indiscale/fdo-edc-adapter.git
+[submodule "fdo-aas-adapter"]
+	path = fdo-aas-adapter
+	url = git@github.com:indiscale/fdo-aas-adapter.git
+[submodule "fdo-manager-webui"]
+	path = fdo-manager-webui
+	url = git@github.com:indiscale/fdo-manager-webui.git
+[submodule "fdo-manager-service"]
+	path = fdo-manager-service
+	url = git@github.com:indiscale/fdo-manager-service.git
+[submodule "fdo-manager-sdk"]
+	path = fdo-manager-sdk
+	url = git@github.com:indiscale/fdo-manager-sdk.git
+[submodule "fdo-manager-e2e-tests"]
+	path = fdo-manager-e2e-tests
+	url = git@github.com:indiscale/fdo-manager-e2e-tests.git
+[submodule "fdo-manager-deploy"]
+	path = fdo-manager-deploy
+	url = git@github.com:indiscale/fdo-manager-deploy.git
+[submodule "fdo-manager-clients"]
+	path = fdo-manager-clients
+	url = git@github.com:indiscale/fdo-manager-clients.git
