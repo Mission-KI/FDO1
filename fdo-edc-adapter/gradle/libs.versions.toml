@@ -1,0 +1,47 @@
+[versions]
+guava = "32.1.2-jre"
+fdo-manager-sdk = "0.1.0-rc16"
+dotenv = "5.2.2"
+jakarta-json = "2.0.1"
+jackson = "2.17.1"
+junit = "5.11.0"
+junit-plattform-launcher = "1.11.0"
+mockito = "5.5.0"
+jackson-databind = "2.17.1"
+jackson-datatype-jdk8 = "2.17.1"
+edc = "0.4.1"
+
+[libraries]
+## app
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
+fdo-manager-sdk = { module = "com.indiscale.fdo:fdo-manager-sdk", version.ref = "fdo-manager-sdk" }
+dotenv = { module = "io.github.cdimascio:java-dotenv", version.ref = "dotenv" }
+jakarta-json = { module = "org.glassfish:jakarta.json", version.ref = "jakarta-json" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
+jackson-datatype-jdk8 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jdk8", version.ref = "jackson" }
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
+mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockito" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-plattform-launcher" }
+
+## connector
+edc-configuration-filesystem = { module = "org.eclipse.edc:configuration-filesystem", version.ref = "edc" }
+edc-control-plane-api = { module = "org.eclipse.edc:control-plane-api", version.ref = "edc" }
+edc-control-plane-api-client = { module = "org.eclipse.edc:control-plane-api-client", version.ref = "edc" }
+edc-control-plane-core = { module = "org.eclipse.edc:control-plane-core", version.ref = "edc" }
+edc-data-plane-core = { module = "org.eclipse.edc:data-plane-core", version.ref = "edc" }
+edc-data-plane-http = { module = "org.eclipse.edc:data-plane-http", version.ref = "edc" }
+edc-data-plane-api = { module = "org.eclipse.edc:data-plane-api", version.ref = "edc" }
+edc-data-plane-selector-api = { module = "org.eclipse.edc:data-plane-selector-api", version.ref = "edc" }
+edc-data-plane-selector-core = { module = "org.eclipse.edc:data-plane-selector-core", version.ref = "edc" }
+edc-data-plane-selector-client = { module = "org.eclipse.edc:data-plane-selector-client", version.ref = "edc" }
+edc-dsp = { module = "org.eclipse.edc:dsp", version.ref = "edc" }
+edc-iam-mock = { module = "org.eclipse.edc:iam-mock", version.ref = "edc" }
+edc-management-api = { module = "org.eclipse.edc:management-api", version.ref = "edc" }
+edc-transfer-data-plane = { module = "org.eclipse.edc:transfer-data-plane", version.ref = "edc" }
+edc-transfer-pull-http-receiver = { module = "org.eclipse.edc:transfer-pull-http-dynamic-receiver", version.ref = "edc" }
+edc-vault-filesystem = { module = "org.eclipse.edc:vault-filesystem", version.ref = "edc" }
+
+[plugins]
+shadow = { id = "com.github.johnrengelman.shadow", version = "8.1.1" }

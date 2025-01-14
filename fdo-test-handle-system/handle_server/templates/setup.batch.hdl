@@ -1,0 +1,8 @@
+AUTHENTICATE PUBKEY:300:TEST/ADMIN
+/hs/templates/admpriv.bin
+
+ADD 0.NA/0.NA
+5 HS_SITE 86000 1110 FILE /hs/srv_1/siteinfo.json
+
+ADD 0.NA/TEST
+5 HS_SITE 86000 1110 FILE /hs/srv_1/siteinfo.json

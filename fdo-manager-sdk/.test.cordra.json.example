@@ -1,0 +1,12 @@
+{
+  "type" : "DOIP",
+  "id": "Cordra",
+  "attributes": {
+    "host": "141.5.106.77",
+    "port": 9000,
+    "username": "admin",
+    "password": "???",
+    "serviceId": "21.T11967/service",
+    "publicKey": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvWBPsSKco0x0n5/U+mBOJX9mrhQr23FOFbXhTHG4jR30j7r1yZKAQyM0i3MJsXupfwSSf4lMOPRdzkQCM6/rgQQJE7iyTn9ZJrAzSKtUwkbqUzxie/CEOX23N9ibZ8lTbvtvVx0sbNrY9Wg72Q5YRTbR+Gp4RhPx2tzKfGxYclWnApTxtiAMgIEgGHuGne4XrXuqISXno+YGDAsuQ5zfQO6NN9vIKkxDo5lvSEvfJUpaJm4BWigMFsBhrI72imFnNRZGuWkYYmIsOALM16pTU8JAOxtLlC83FeiYfG3zYovOQfTctN3+3jAgNjKn6JRLC9zw6uA0yAL1+2U/DksA3wIDAQAB"
+  }
+}

@@ -1,0 +1,12 @@
+[submodule "test-handle-system"]
+	path = test-handle-system
+	url = git@gitlab.indiscale.com:fdo/test-handle-system.git
+[submodule "fdo-manager/fdo-manager-service"]
+	path = fdo-manager/fdo-manager-service
+	url = git@gitlab.indiscale.com:fdo/fdo-manager-service.git
+[submodule "fdo-aas-adapter/fdo-aas-adapter"]
+	path = fdo-aas-adapter/fdo-aas-adapter
+	url = git@gitlab.indiscale.com:fdo/fdo-aas-adapter/fdo-aas-adapter.git
+[submodule "fdo-manager/fdo-manager-webui"]
+	path = fdo-manager/fdo-manager-webui
+	url = git@gitlab.indiscale.com:fdo/fdo-manager-webui.git

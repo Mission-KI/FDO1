@@ -1,0 +1,17 @@
+{
+  "type": "DOIP",
+  "id": "linkahead",
+  "attributes": {
+    "username": "fdo_admin",
+    "password": "???",
+    "typeDo": "0.TYPE/DO",
+    "typeFdo": "21.T11969/FDO_TYPE",
+    "typeDataRef": "FDO_Data_Refs",
+    "typeMDRef": "FDO_MD_Refs",
+    "typeProfileRef": "FDO_Profile_Ref",
+    "host": "141.5.106.169",
+    "port": "9000",
+    "serviceId": "21.T11965/linkahead",
+    "publicKey": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmi6wrqzaXAOqOqNEmA8H9LMZCQe4vtSG8Xkt0SSmjcc7xc/wtwMUpAe04ycboThcH5w9lf0vfNL2uZegwAfYHESP2MmojztxcQV7eYRe0N20hCu6DPH5VS+rX1uGAEHkuLkPNHfS8IblsFSdDrwrfIBCW0jqgZFeNYDPtiU0nXyemfN4MC3+fMOMJn3YREtZNG2hJ1pg0KyhsPuzIDlfvGq4JpJMlueBXLIisua6wBTvWYL9R5LwnCG74kqhOD0djabj5mTdTlHDS4oSkLmfE43tlb27eZcYcJMUr1tNmJslJZ9b8QpF1jgAd9uhat/GFuzEcACJl0mgWJVFfwhjhwIDAQAB"
+  }
+}

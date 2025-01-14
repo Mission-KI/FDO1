@@ -1,0 +1,180 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.06kB done
+#1 DONE 0.0s
+
+#2 [auth] refinedev/node:pull token for registry-1.docker.io
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/refinedev/node:18
+#3 DONE 1.1s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 2B done
+#4 DONE 0.0s
+
+#5 [base 1/1] FROM docker.io/refinedev/node:18@sha256:f69e6f978a791300bb65ca639a27f1e6d4606f6324382de521ce39001615d25c
+#5 CACHED
+
+#6 [internal] load build context
+#6 ...
+
+#7 [deps 1/3] RUN apk add --no-cache libc6-compat
+#7 0.189 fetch https://dl-cdn.alpinelinux.org/alpine/v3.19/main/x86_64/APKINDEX.tar.gz
+#7 0.415 fetch https://dl-cdn.alpinelinux.org/alpine/v3.19/community/x86_64/APKINDEX.tar.gz
+#7 0.900 (1/3) Installing musl-obstack (1.2.3-r2)
+#7 0.921 (2/3) Installing libucontext (1.2-r2)
+#7 0.940 (3/3) Installing gcompat (1.1.0-r4)
+#7 0.965 OK: 10 MiB in 20 packages
+#7 DONE 1.8s
+
+#6 [internal] load build context
+#6 transferring context: 182.06MB 5.1s
+#6 transferring context: 182.06MB 5.1s done
+#6 DONE 5.3s
+
+#8 [deps 2/3] COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
+#8 DONE 2.2s
+
+#9 [deps 3/3] RUN   if [ -f yarn.lock ]; then yarn --frozen-lockfile;   elif [ -f package-lock.json ]; then npm ci;   elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i --frozen-lockfile;   else echo "Lockfile not found." && exit 1;   fi
+#9 8.695 npm WARN deprecated urix@0.1.0: Please see https://github.com/lydell/urix#deprecated
+#9 8.719 npm WARN deprecated resolve-url@0.2.1: https://github.com/lydell/resolve-url#deprecated
+#9 8.754 npm WARN deprecated @babel/plugin-proposal-class-properties@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-class-properties instead.
+#9 8.988 npm WARN deprecated @babel/plugin-proposal-nullish-coalescing-operator@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-nullish-coalescing-operator instead.
+#9 9.020 npm WARN deprecated source-map-url@0.4.1: See https://github.com/lydell/source-map-url#deprecated
+#9 9.251 npm WARN deprecated source-map-resolve@0.5.3: See https://github.com/lydell/source-map-resolve#deprecated
+#9 9.270 npm WARN deprecated @babel/plugin-proposal-optional-chaining@7.21.0: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-optional-chaining instead.
+#9 36.92 
+#9 36.92 added 1056 packages, and audited 1057 packages in 37s
+#9 36.92 
+#9 36.92 265 packages are looking for funding
+#9 36.92   run `npm fund` for details
+#9 36.93 
+#9 36.93 found 0 vulnerabilities
+#9 36.93 npm notice 
+#9 36.93 npm notice New minor version of npm available! 10.2.3 -> 10.5.0
+#9 36.93 npm notice Changelog: <https://github.com/npm/cli/releases/tag/v10.5.0>
+#9 36.93 npm notice Run `npm install -g npm@10.5.0` to update!
+#9 36.93 npm notice 
+#9 DONE 42.0s
+
+#10 [builder 1/3] COPY --from=deps /app/refine/node_modules ./node_modules
+#10 DONE 14.9s
+
+#11 [builder 2/3] COPY . .
+#11 DONE 40.4s
+
+#12 [builder 3/3] RUN npm run build
+#12 1.559 
+#12 1.559 > fdo-manager-webui-refine@0.1.0 build
+#12 1.559 > refine build --debug
+#12 1.559 
+#12 2.828 ╭──────────────────────────────────────────────────────────────────────────────╮
+#12 2.828 │                                                                              │
+#12 2.828 │ - refine Devtools beta version is out! To install in your project, just run  │
+#12 2.828 │   npm run refine devtools init. https://s.refine.dev/devtools-beta           │
+#12 2.828 │                                                                              │
+#12 2.828 │ - Hello from refine team! Hope you enjoy! Join our Discord community to get  │
+#12 2.828 │   help and discuss with other users. https://discord.gg/refine               │
+#12 2.828 │                                                                              │
+#12 2.828 ╰──────────────────────────────────────────────────────────────────────────────╯
+#12 4.288 [35m[1mAttention[22m[39m: Next.js now collects completely anonymous telemetry regarding usage.
+#12 4.288 This information is used to shape Next.js' roadmap and prioritize features.
+#12 4.288 You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+#12 4.288 [36mhttps://nextjs.org/telemetry[39m
+#12 4.288 
+#12 4.427  [37m[1m [22m[39m Linting and checking validity of types ...
+#12 12.95  [37m[1m [22m[39m Creating an optimized production build ...
+#12 25.83  [32m[1m✓[22m[39m Compiled successfully
+#12 25.83  [37m[1m [22m[39m Collecting page data ...
+#12 29.43  [37m[1m [22m[39m Generating static pages (0/17) ...
+#12 29.54 react-i18next:: You will need to pass in an i18next instance by using initReactI18next
+#12 29.54 react-i18next:: You will need to pass in an i18next instance by using initReactI18next
+#12 29.54 react-i18next:: You will need to pass in an i18next instance by using initReactI18next
+#12 29.54 react-i18next:: You will need to pass in an i18next instance by using initReactI18next
+#12 29.54 react-i18next:: You will need to pass in an i18next instance by using initReactI18next
+#12 29.62 react-i18next:: You will need to pass in an i18next instance by using initReactI18next
+#12 29.64  [37m[1m [22m[39m Generating static pages (4/17) 
+#12 29.76  [37m[1m [22m[39m Generating static pages (8/17) 
+#12 29.82  [37m[1m [22m[39m Generating static pages (12/17) 
+#12 29.82 getStaticProps { locales: [ [32m'en'[39m, [32m'de'[39m ], locale: [32m'en'[39m, defaultLocale: [32m'en'[39m } {
+#12 29.82   _nextI18Next: {
+#12 29.82     initialI18nStore: { en: [36m[Object][39m },
+#12 29.82     userConfig: {
+#12 29.82       i18n: [36m[Object][39m,
+#12 29.82       localePath: [32m'/app/refine/public/locales'[39m,
+#12 29.82       default: [36m[Object][39m
+#12 29.82     }
+#12 29.82   }
+#12 29.82 }
+#12 29.82 getStaticProps { locales: [ [32m'en'[39m, [32m'de'[39m ], locale: [32m'de'[39m, defaultLocale: [32m'en'[39m } {
+#12 29.82   _nextI18Next: {
+#12 29.82     initialI18nStore: { en: [36m[Object][39m },
+#12 29.82     userConfig: {
+#12 29.82       i18n: [36m[Object][39m,
+#12 29.82       localePath: [32m'/app/refine/public/locales'[39m,
+#12 29.82       default: [36m[Object][39m
+#12 29.82     }
+#12 29.82   }
+#12 29.82 }
+#12 29.95 react-i18next:: You will need to pass in an i18next instance by using initReactI18next
+#12 30.10  [32m[1m✓[22m[39m Generating static pages (17/17) 
+#12 32.97  [37m[1m [22m[39m Finalizing page optimization ...
+#12 32.97  [37m[1m [22m[39m Collecting build traces ...
+#12 34.95 [4mRedirects[24m
+#12 34.95 
+#12 34.95 ┌ source: /:path+/
+#12 34.95 ├ destination: /:path+
+#12 34.95 └ permanent: true
+#12 34.95  
+#12 34.95 
+#12 57.56 
+#12 57.56 [4mRoute (pages)[24m                              [4mSize[24m     [4mFirst Load JS[24m
+#12 57.56 ┌ ○ /                                      272 B           [31m[1m406 kB[22m[39m
+#12 57.56 ├   /_app                                  0 B             [31m[1m406 kB[22m[39m
+#12 57.56 ├ λ /[...catchAll]                         284 B           [31m[1m406 kB[22m[39m
+#12 57.56 ├ ○ /404                                   681 B           [31m[1m407 kB[22m[39m
+#12 57.56 ├ λ /api/auth/[...nextauth]                0 B             [31m[1m406 kB[22m[39m
+#12 57.56 ├ ○ /fdo                                   4.82 kB         [31m[1m411 kB[22m[39m
+#12 57.56 ├ λ /fdo/show/[id]                         817 B           [31m[1m407 kB[22m[39m
+#12 57.56 ├ ○ /info                                  608 B           [31m[1m407 kB[22m[39m
+#12 57.56 ├ λ /login                                 732 B           [31m[1m407 kB[22m[39m
+#12 57.56 └ ○ /repositories ([32m563 ms[39m)                 95.4 kB         [31m[1m502 kB[22m[39m
+#12 57.56 + First Load JS shared by all              [31m[1m406 kB[22m[39m
+#12 57.56   ├ chunks/framework-467b11a89995b152.js   45.4 kB
+#12 57.56   ├ chunks/main-0577a5cff876d7ca.js        33.8 kB
+#12 57.56   ├ chunks/pages/_app-aa9ccd582f08290e.js  326 kB
+#12 57.56   └ chunks/webpack-6af0e3c12b874bb0.js     1.03 kB
+#12 57.56 
+#12 57.57 λ  (Server)  server-side renders at runtime (uses [36mgetInitialProps[39m or [36mgetServerSideProps[39m)
+#12 57.57 ○  (Static)  automatically rendered as static HTML (uses no initial props)
+#12 57.57 
+#12 58.76 npm notice 
+#12 58.76 npm notice New minor version of npm available! 10.2.3 -> 10.5.0
+#12 58.76 npm notice Changelog: <https://github.com/npm/cli/releases/tag/v10.5.0>
+#12 58.76 npm notice Run `npm install -g npm@10.5.0` to update!
+#12 58.76 npm notice 
+#12 DONE 59.1s
+
+#13 [runner 1/5] COPY --from=builder /app/refine/public ./public
+#13 DONE 0.6s
+
+#14 [runner 2/5] RUN mkdir .next
+#14 DONE 1.3s
+
+#15 [runner 3/5] RUN chown refine:nodejs .next
+#15 DONE 1.2s
+
+#16 [runner 4/5] COPY --from=builder --chown=refine:nodejs /app/refine/.next/standalone ./
+#16 DONE 1.8s
+
+#17 [runner 5/5] COPY --from=builder --chown=refine:nodejs /app/refine/.next/static ./.next/static
+#17 DONE 0.8s
+
+#18 exporting to image
+#18 exporting layers
+#18 exporting layers 1.3s done
+#18 writing image sha256:facd277f8e61f6c6b52c63a1832abd99fbd10cd4b382d7aecc2004f7e1ff2503 0.0s done
+#18 naming to docker.io/library/fdo-manager-webui:latest 0.1s done
+#18 DONE 1.4s

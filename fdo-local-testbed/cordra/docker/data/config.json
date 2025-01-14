@@ -1,0 +1,5 @@
+{
+  "listenAddress": "0.0.0.0",
+  "httpsPort": "8443",
+  "httpPort": "8080"
+}

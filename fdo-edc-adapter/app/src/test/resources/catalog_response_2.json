@@ -1,0 +1,48 @@
+{
+  "@id": "3de1b60e-a2a6-43d6-ad15-2dc26b951308",
+  "@type": "dcat:Catalog",
+  "dcat:dataset": {
+    "@id": "myAssetId2",
+    "@type": "dcat:Dataset",
+    "odrl:hasPolicy": {
+      "@id": "ZGY=:bXlBc3NldElkMg==:NTVkNzEzZmYtOTViOC00MGI0LWI4ZmItZjljY2Q3M2Y4NzI5",
+      "@type": "odrl:Set",
+      "odrl:permission": {
+        "odrl:target": "myAssetId2",
+        "odrl:action": {
+          "odrl:type": "USE"
+        },
+        "odrl:constraint": {
+          "odrl:leftOperand": "ALWAYS_TRUE",
+          "odrl:operator": {
+            "@id": "odrl:eq"
+          },
+          "odrl:rightOperand": "true"
+        }
+      },
+      "odrl:prohibition": [],
+      "odrl:obligation": [],
+      "odrl:target": "myAssetId2"
+    },
+    "dcat:distribution": [],
+    "edc:name": "Product EDC Demo Asset",
+    "edc:description": "Product Description about Test Asset",
+    "edc:isFdo": "true",
+    "edc:id": "myAssetId2",
+    "edc:contenttype": "application/json"
+  },
+  "dcat:service": {
+    "@id": "624c0002-eab6-41e4-990f-82a00320205a",
+    "@type": "dcat:DataService",
+    "dct:terms": "connector",
+    "dct:endpointUrl": "http://localhost:11003/api/dsp"
+  },
+  "edc:participantId": "MDSLENEWB0.C33384T",
+  "@context": {
+    "dct": "https://purl.org/dc/terms/",
+    "edc": "https://w3id.org/edc/v0.0.1/ns/",
+    "dcat": "https://www.w3.org/ns/dcat/",
+    "odrl": "http://www.w3.org/ns/odrl/2/",
+    "dspace": "https://w3id.org/dspace/v0.8/"
+  }
+}

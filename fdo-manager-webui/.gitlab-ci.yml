@@ -1,0 +1,64 @@
+variables:
+  CI_REGISTRY_IMAGE_ENV: $CI_REGISTRY/fdo/fdo-manager-webui/testenv:$CI_COMMIT_REF_NAME
+  CI_REGISTRY_IMAGE_BUILD: $CI_REGISTRY/fdo/fdo-manager-webui/fdo-manager-webui:latest
+
+
+default:
+  image: docker:22.06-rc
+  tags:
+    - docker
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_REF_NAME != $CI_COMMIT_TAG
+
+stages:
+  - setup
+  - test
+  - deploy
+
+webui:setup:
+  stage: setup
+  rules:
+    - if: $RUN_SETUP_STAGE == "false"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "web"
+    - if: $CI_PIPELINE_SOURCE != "schedule"
+      changes:
+        - .test/Dockerfile
+        - package.json
+        - package-lock.json
+        - .gitlab-ci.yml
+  script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker build --pull -t $CI_REGISTRY_IMAGE_ENV -f .test/Dockerfile .
+    - docker push $CI_REGISTRY_IMAGE_ENV
+
+.webui:job: &webui-job
+  image: $CI_REGISTRY_IMAGE_ENV
+  stage: test
+  needs:
+    - job: "webui:setup"
+      optional: true
+  before_script:
+    - cp -r -t ./ /webui/node_modules
+    - npm install
+
+webui:build-test:
+  <<: *webui-job
+  script:
+    - npm run build
+
+webui:deploy:
+  stage: deploy
+  only:
+    - /^main$/
+  needs:
+    - job: "webui:build-test"
+  script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker build --pull -t $CI_REGISTRY_IMAGE_BUILD -f Dockerfile .
+    - docker push $CI_REGISTRY_IMAGE_BUILD
+
+

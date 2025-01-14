@@ -1,0 +1,25 @@
+name:
+  test-handle-net
+services:
+  hs_server:
+    build:
+      context: ./handle_server
+    env_file: .env
+    networks:
+      hs_network:
+        ipv4_address: ${HANDLE_SERVER_IPV4_ADDRESS}
+    volumes:
+      - hs_srv1:/hs/srv_1
+      - type: bind
+        source: ./.handle/
+        target: /root/.handle/
+
+networks:
+  hs_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${DOCKER_SUBNET}
+          gateway: ${DOCKER_SUBNET_GATEWAY}
+volumes:
+  hs_srv1:

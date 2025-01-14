@@ -1,0 +1,44 @@
+image: docker:27.1
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_REF_NAME != $CI_COMMIT_TA
+
+variables:
+  GIT_SUBMODULE_STRATEGY: "recursive"
+  GIT_SUBMODULE_FORCE_HTTPS: "true"
+  LINKAHEAD_TAG: "dev_F_f-doip_P_f-string-ids"
+
+test.mock-manager:
+  stage: test
+  before_script:
+    - apk add make
+  script:
+    - cd fdo-local-testbed/fdo-manager/
+    - "export FDO_MANAGER_MOCK=true"
+    - make clean start
+    - docker compose logs
+    - cd ../../
+    - "docker run --network host -v./:/run -w /run python:3.12-alpine ./run_tests.sh"
+  after_script:
+    - cd fdo-local-testbed/fdo-manager/
+    - docker compose logs
+    - make stop
+
+test.testbed:
+  stage: test
+  before_script:
+    - apk add make
+  script:
+    - export CORDRA_HTTPS_PORT=9443
+    - "export LINKAHEAD_IMAGE=$CI_REGISTRY/caosdb/src/caosdb-deploy:$LINKAHEAD_TAG"
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker pull $LINKAHEAD_IMAGE
+    - make -C fdo-local-testbed clean start
+    - "docker run -e DEFAULT_TIMEOUT=5 --network host -v./:/run -w /run python:3.12-alpine ./run_tests.sh"
+  after_script:
+    - make -C fdo-local-testbed stop
+
+
+
+

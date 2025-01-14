@@ -1,0 +1,9 @@
+import { version } from './version'
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || '/api'
+export const FDO_MANAGER_WEBUI_VERSION = version
+export const FDO_COMMUNITY_TYPE_EVEBS = process.env.NEXT_PUBLIC_FDO_COMMUNITY_TYPE_EVEBS || "21.T11966/f7f29218c8d5832ab5b5"
+export const FDO_COMMUNITY_MD_PROFILE_AAS = process.env.NEXT_PUBLIC_FDO_COMMUNITY_MD_PROFILE_AAS || "21.T11966/49321f913c960ec3c943"
+export const FDO_COMMUNITY_MD_PROFILE_EDC = process.env.NEXT_PUBLIC_FDO_COMMUNITY_MD_PROFILE_EDC || "21.T11966/3f1cfd3bb60bee84c22b"
+export const HANDLE_SYSTEM_BASE_URI = process.env.NEXT_PUBLIC_HANDLE_SYSTEM_BASE_URI || "https://hdl.handle.net"
+export const HANDLE_SYSTEM_DOWNLOAD_PROXY = process.env.NEXT_PUBLIC_HANDLE_SYSTEM_DOWNLOAD_PROXY || HANDLE_SYSTEM_BASE_URI
+export const CORDRA_HANDLE = process.env.NEXT_PUBLIC_CORDRA_HANDLE || "21.T11967/service"

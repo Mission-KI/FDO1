@@ -1,0 +1,22 @@
+{
+  "@id": "myAssetId",
+  "@type": "Asset",
+  "properties": {
+    "id": "myAssetId",
+    "name": "Test Asset",
+    "description": "This is a test asset",
+    "contenttype": "application/json",
+    "isFdo": "true"
+  },
+  "dataAddress": {
+    "@type": "DataAddress",
+    "type": "HttpData",
+    "baseUrl": "http://example.com/data",
+    "proxyPath": "/data",
+    "proxyQueryParams": "param1=value1"
+  },
+  "@context": {
+    "@vocab": "https://example.com/vocab#",
+    "edc": "https://w3id.org/edc/v0.0.1/ns/"
+  }
+}

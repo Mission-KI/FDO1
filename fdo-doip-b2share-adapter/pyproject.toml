@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "fdo-doip-b2share-adapter"
+version = "0.0.1"
+description = "The DOIP adapter for B2SHARE."
+authors = ["Sven Bingert <sven.bingert@gwdg.de>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+doip-sdk = "^0.0.5"
+requests = "^2.32.3"
+pydantic = "^2.9.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

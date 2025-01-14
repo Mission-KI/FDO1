@@ -1,0 +1,17 @@
+name:
+  local-fdo-testbed
+services:
+  cordra:
+    container_name: "${COMPOSE_PROJECT_NAME}-cordra"
+    build:
+      context: ./docker
+    env_file: .env
+    volumes:
+      - type: bind
+        source: ../test-handle-system/.handle/
+        target: /root/.handle
+    ports:
+      - "${CORDRA_HTTP_PORT}:8080"
+      - "${CORDRA_HTTPS_PORT}:8443"
+      - "${CORDRA_HANDLE_PORT}:2641"
+      - "${CORDRA_DOIP_PORT}:9000"

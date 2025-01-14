@@ -1,0 +1,65 @@
+services:
+  keycloak-postgres:
+    container_name: "${COMPOSE_PROJECT_NAME}-keycloak-postgres"
+    image: 'postgres:15-alpine'
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: keycloak
+    networks:
+      - keycloak_nw
+    volumes:
+      - ./keycloak:/tmp/postgresdump
+  keycloak:
+    container_name: "${COMPOSE_PROJECT_NAME}-keycloak"
+    build:
+      context: ./keycloak
+    command:
+      start
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=keycloak
+      - KC_DB=postgres
+      - KC_DB_USERNAME=username
+      - KC_DB_PASSWORD=password
+      - KC_DB_URL_PORT=5432
+      - KC_DB_URL_HOST=keycloak-postgres
+      - KC_DB_URL_DATABASE=keycloak
+      - KC_HTTP_ENABLED=true
+      - KC_HOSTNAME_STRICT=false
+      - KC_HOSTNAME_STRICT_HTTPS=false
+      - KC_HOSTNAME=${KC_HOSTNAME}
+      - KC_PROXY=edge
+      - KC_HTTP_RELATIVE_PATH=/auth
+      - KC_HOSTNAME_PORT=${KC_HOSTNAME_PORT}
+    networks:
+      - keycloak_nw
+      - nginx_nw
+  nginx:
+    container_name: "${COMPOSE_PROJECT_NAME}-nginx"
+    build:
+      context: ./nginx
+    environment:
+      - "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME}"
+      - "NGINX_PORT=${NGINX_PORT}"
+    networks:
+      - nginx_nw
+      - default
+      - handle
+    external_links:
+      - "${COMPOSE_PROJECT_NAME}-fdo-manager-service:fdo-manager-service"
+      - "${COMPOSE_PROJECT_NAME}-webui:fdo-manager-webui"
+      - "${COMPOSE_PROJECT_NAME}-hs-server:hs-server"
+    ports:
+      - "0.0.0.0:${NGINX_PORT}:${NGINX_PORT}"
+networks:
+  keycloak_nw:
+    driver: bridge
+  nginx_nw:
+    driver: bridge
+  handle:
+    name: "${COMPOSE_PROJECT_NAME}-hs-network"
+    external: true
+  default:
+    name: "${COMPOSE_PROJECT_NAME}_default"
+    external: true

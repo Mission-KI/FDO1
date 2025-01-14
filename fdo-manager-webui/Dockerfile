@@ -1,0 +1,76 @@
+FROM refinedev/node:18 AS base
+
+RUN npm install -g --update npm
+
+FROM base AS deps
+
+RUN apk add --no-cache libc6-compat
+
+
+COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
+
+RUN \
+  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+  elif [ -f package-lock.json ]; then npm ci; \
+  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i --frozen-lockfile; \
+  else echo "Lockfile not found." && exit 1; \
+  fi
+
+FROM base AS builder
+
+COPY --from=deps /app/refine/node_modules ./node_modules
+
+COPY . .
+
+
+ENV PORT 8000
+ARG NEXT_PUBLIC_API_URL
+ARG KEY_CLOAK_CLIENT_SECRET
+ARG KEY_CLOAK_CLIENT_ID
+ARG KEY_CLOAK_ISSUER
+ARG NEXT_PUBLIC_HANDLE_SYSTEM_BASE_URI
+ARG NEXT_PUBLIC_HANDLE_SYSTEM_DOWNLOAD_PROXY
+ARG NEXTAUTH_URL
+ARG NEXT_PUBLIC_CORDRA_HANDLE
+ARG NEXT_PUBLIC_SHOWCASE_LEFT_PID
+ARG NEXT_PUBLIC_SHOWCASE_LEFT_MDPID
+ARG NEXT_PUBLIC_SHOWCASE_RIGHT_PID
+ARG NEXT_PUBLIC_SHOWCASE_RIGHT_MDPID
+
+ENV KEY_CLOAK_ISSUER=${KEY_CLOAK_ISSUER}
+ENV KEY_CLOAK_CLIENT_SECRET=${KEY_CLOAK_CLIENT_SECRET}
+ENV KEY_CLOAK_CLIENT_ID=${KEY_CLOAK_CLIENT_ID}
+
+ENV NEXT_PUBLIC_HANDLE_SYSTEM_DOWNLOAD_PROXY=${NEXT_PUBLIC_HANDLE_SYSTEM_DOWNLOAD_PROXY}
+ENV NEXT_PUBLIC_HANDLE_SYSTEM_BASE_URI=${NEXT_PUBLIC_HANDLE_SYSTEM_BASE_URI}
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-"https://manager.testbed.pid.gwdg.de/api/v1"}
+ENV NEXTAUTH_URL=${NEXTAUTH_URL}
+ENV NEXT_PUBLIC_CORDRA_HANDLE=${NEXT_PUBLIC_CORDRA_HANDLE}
+ENV NEXT_PUBLIC_SHOWCASE_LEFT_PID=${NEXT_PUBLIC_SHOWCASE_LEFT_PID}
+ENV NEXT_PUBLIC_SHOWCASE_RIGHT_PID=${NEXT_PUBLIC_SHOWCASE_RIGHT_PID}
+ENV NEXT_PUBLIC_SHOWCASE_LEFT_MDPID=${NEXT_PUBLIC_SHOWCASE_LEFT_MDPID}
+ENV NEXT_PUBLIC_SHOWCASE_RIGHT_MDPID=${NEXT_PUBLIC_SHOWCASE_RIGHT_MDPID}
+
+RUN npm run build
+
+FROM base AS runner
+
+ENV NODE_ENV production
+
+COPY --from=builder /app/refine/public ./public
+
+RUN mkdir .next
+RUN chown refine:nodejs .next
+
+COPY --from=builder --chown=refine:nodejs /app/refine/.next/standalone ./
+COPY --from=builder --chown=refine:nodejs /app/refine/.next/static ./.next/static
+
+USER refine
+
+ENV PORT 8000
+ENV KEY_CLOAK_ISSUER=${KEY_CLOAK_ISSUER}
+ENV KEY_CLOAK_CLIENT_SECRET=${KEY_CLOAK_CLIENT_SECRET}
+ENV KEY_CLOAK_CLIENT_ID=${KEY_CLOAK_CLIENT_ID}
+ENV NEXTAUTH_URL=${NEXTAUTH_URL}
+
+CMD ["node", "server.js"]

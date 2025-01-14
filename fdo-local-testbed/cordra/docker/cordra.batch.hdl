@@ -1,0 +1,5 @@
+AUTHENTICATE PUBKEY:300:TEST/ADMIN
+/hs/templates/admpriv.bin
+
+CREATE 0.NA/TEST.CORDRA
+1 HS_SITE 86400 1110 FILE /hs/cordra.siteinfo.bin

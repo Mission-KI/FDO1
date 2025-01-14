@@ -1,0 +1,99 @@
+{
+  "lastUpdate": 1725884218416,
+  "handles": {
+    "0.0/0.0": {
+      "handle": "0.0/0.0",
+      "values": [
+        {
+          "index": 100,
+          "type": "HS_ADMIN",
+          "data": {
+            "format": "admin",
+            "value": {
+              "handle": "0.TEST/ADMIN",
+              "index": 200,
+              "permissions": "011111110011"
+            }
+          },
+          "ttl": 86400,
+          "timestamp": "2014-09-18T15:55:32Z"
+        }
+      ]
+    },
+    "0.NA/0.NA": {
+      "handle": "0.NA/0.NA",
+      "values": [
+        {
+          "index": 100,
+          "type": "HS_ADMIN",
+          "data": {
+            "format": "admin",
+            "value": {
+              "handle": "0.TEST/ADMIN",
+              "index": 200,
+              "permissions": "111111111111"
+            }
+          },
+          "ttl": 86400,
+          "timestamp": "2015-12-08T22:00:05Z"
+        },
+        {
+          "index": 5,
+          "type": "HS_SITE",
+          "data": {
+            "format": "site",
+            "value": {
+  "version": 1,
+  "protocolVersion": "2.11",
+  "serialNumber": 1,
+  "primarySite": true,
+  "multiPrimary": false,
+  "attributes": [
+    {
+      "name": "desc",
+      "value": ""
+    }
+  ],
+  "servers": [
+    {
+      "serverId": 1,
+      "address": "HANDLE_SERVER_IPV4_ADDRESS",
+      "publicKey": {
+        "format": "key",
+        "value": {
+          "kty": "RSA",
+          "n": "wqkCd9QfFxYwMhQM72k-nQ5yL0lbxz9OTOTgR2eFj6dz5YZzoDg3t4MauMVUt5pkByWScle-7mdVJHuEp1GErqyzW3dPagTgmzc1R1i2gQF5fUiJFx90hkAzh88PW4qFs_YBwOsChGanGzsqn6cbKV3VQn5K2QZHF7rxeKdstF72lFN7ewkk-Kw5i0I3akpGYu9YJ_Is8k7rDQ5P_KKfrn_N_0_seQO-IT9vW_u0IvK75_6VwNjU5wU6SDF9dgivSk-qv7R_rpl8eAow0zUkllsFqJxEEn63koK5gSsKitfN7Jt_71b_Nwmjpv2gEydh42bEOSHx0dFeALwY1rl74w",
+          "e": "AQAB"
+        }
+      },
+      "interfaces": [
+        {
+          "query": true,
+          "admin": true,
+          "protocol": "TCP",
+          "port": 2641
+        },
+        {
+          "query": true,
+          "admin": false,
+          "protocol": "UDP",
+          "port": 2641
+        },
+        {
+          "query": true,
+          "admin": true,
+          "protocol": "HTTP",
+          "port": 8000
+        }
+      ]
+    }
+  ]
+            }
+          },
+          "ttl": 86400,
+          "timestamp": "2023-04-18T08:07:14Z"
+        }
+      ]
+    }
+  }
+}

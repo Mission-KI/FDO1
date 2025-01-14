@@ -1,0 +1,8 @@
+.test.linkahead.json
+.test.cordra.json
+.classpath
+.settings/
+.project
+.m2/
+bin/
+target/

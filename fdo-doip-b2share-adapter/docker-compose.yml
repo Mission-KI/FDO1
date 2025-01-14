@@ -1,0 +1,18 @@
+name: b2share-adapter
+services:
+  b2share-adapter:
+    image: docker.gitlab.gwdg.de/fdo-testbed-2024/fdo-doip-b2share-adapter
+    container_name: "b2share-adapter"
+    restart: always
+    pull_policy: always
+    ports:
+      - "9999:9999"
+    networks:
+      - adapter-network
+
+networks:
+  adapter-network:
+    name: adapter-network
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: 1450

@@ -1,0 +1,10 @@
+services:
+  aas-adapter:
+    container_name: "${COMPOSE_PROJECT_NAME}-aas-server"
+    build:
+      context: .
+      args:
+        API_CLIENT_URL: "${API_CLIENT_URL}"
+    env_file: .env
+    ports:
+      - "${AAS_HTTP_PORT}:8084"

@@ -1,0 +1,75 @@
+version: '3.9'
+
+services:
+  postgres:
+    container_name: postgres
+    restart: unless-stopped
+    image: 'postgres:15-alpine'
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: keycloak
+    networks:
+      - keycloak_nw
+    volumes:
+      - postgres:/var/lib/postgresql/data
+  keycloak:
+    #restart: unless-stopped
+    build:
+      context: ./keycloak
+    command:
+      start
+    ports:
+      - 8443:8443
+      - 8080:8080
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=postgres
+      - KC_DB_USERNAME=username
+      - KC_DB_PASSWORD=password
+      - KC_DB_URL_PORT=5432
+      - KC_DB_URL_HOST=postgres
+      - KC_DB_URL_DATABASE=keycloak
+      - KC_HTTP_ENABLED=true
+      - KC_HOSTNAME_STRICT=false
+      - KC_HOSTNAME_STRICT_HTTPS=false
+      - KC_HOSTNAME=localhost
+      - KC_PROXY=edge
+      - KC_HTTP_RELATIVE_PATH=/auth
+      - KC_HOSTNAME_PORT=8000
+    networks:
+      - keycloak_nw
+      - nginx_nw
+  service:
+    build:
+      context: ./service
+    networks:
+      - nginx_nw
+    environment:
+      - SERVER_SERVLET_CONTEXT_PATH=/api
+  webui:
+    #image: "gitlab.indiscale.com:5050/fdo/fdo-manager-webui/fdo-manager-webui:latest"
+    image: fdo-manager-webui:latest
+    networks:
+      - nginx_nw
+    ports:
+      - 3000:3000
+    environment:
+      - NEXT_PUBLIC_API_URL=/api
+  nginx:
+    build:
+      context: ./nginx
+    networks:
+      - nginx_nw
+    ports:
+      - "0.0.0.0:8000:8000"
+networks:
+  keycloak_nw:
+    driver: bridge
+  nginx_nw:
+    driver: bridge
+volumes:
+  postgres:
+    driver: local
+  static:

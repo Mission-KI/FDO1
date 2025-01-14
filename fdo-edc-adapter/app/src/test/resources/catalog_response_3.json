@@ -1,0 +1,39 @@
+{
+  "@id": "2e2a0d70-b9f6-410b-b0a3-e7019a3165fe",
+  "@type": "dcat:Catalog",
+  "dcat:dataset": {
+    "@id": "myAssetId2",
+    "@type": "dcat:Dataset",
+    "odrl:hasPolicy": {
+      "@id": "Q29udHJhY3REZWZpbml0b25Gb3JUZXN0QXNzZXQ=:bXlBc3NldElk:NDg0NDEwMGYtMjdiMy00ZGRiLWEzYTMtNmEwZTRkNjNjYzdi",
+      "@type": "odrl:Set",
+      "odrl:permission": [],
+      "odrl:prohibition": [],
+      "odrl:obligation": [],
+      "odrl:target": {
+        "@id": "myAssetId"
+      }
+    },
+    "dcat:distribution": [],
+    "name": "Product EDC Demo Asset",
+    "description": "Product Description about Test Asset",
+    "isFdo": "true",
+    "id": "myAssetId2",
+    "contenttype": "application/json"
+  },
+  "dcat:service": {
+    "@id": "2d1bdfcf-a105-4138-943f-ff2e060ff4bf",
+    "@type": "dcat:DataService",
+    "dct:terms": "connector",
+    "dct:endpointUrl": "http://localhost:19194/protocol"
+  },
+  "participantId": "provider",
+  "@context": {
+    "@vocab": "https://w3id.org/edc/v0.0.1/ns/",
+    "edc": "https://w3id.org/edc/v0.0.1/ns/",
+    "dcat": "https://www.w3.org/ns/dcat/",
+    "dct": "https://purl.org/dc/terms/",
+    "odrl": "http://www.w3.org/ns/odrl/2/",
+    "dspace": "https://w3id.org/dspace/v0.8/"
+  }
+}

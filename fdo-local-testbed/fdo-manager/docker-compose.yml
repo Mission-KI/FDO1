@@ -1,0 +1,53 @@
+services:
+  fdo-manager-service:
+    container_name: "${COMPOSE_PROJECT_NAME}-fdo-manager-service"
+    image: maven:latest
+    command: ["mvn", "-Dmaven.repo.local=/opt/m2/repository", "spring-boot:run"]
+    working_dir: "/opt/app"
+    environment:
+      JAVA_TOOL_OPTIONS: "-Dmock=${FDO_MANAGER_MOCK:-false} -DrepositoriesDir=/repositories -Dserver.port=8000"
+    volumes:
+      - type: volume
+        source: m2
+        target: /opt/m2
+      - type: bind
+        source: ./fdo-manager-service
+        target: /opt/app
+      - type: bind
+        source: ./repositories
+        target: /repositories
+      - type: bind
+        source: ../test-handle-system/.handle
+        target: /root/.handle
+    expose:
+      - 8000
+  webui:
+    #image: "gitlab.indiscale.com:5050/fdo/fdo-manager-webui/fdo-manager-webui:latest"
+    container_name: "${COMPOSE_PROJECT_NAME}-webui"
+    build:
+      context: fdo-manager-webui
+      args:
+        - NEXT_PUBLIC_API_URL=/api/v1
+        - NEXT_PUBLIC_HANDLE_SYSTEM_BASE_URI=${HANDLE_SYSTEM_BASE_URI}
+        - NEXT_PUBLIC_HANDLE_SYSTEM_DOWNLOAD_PROXY=${HANDLE_SYSTEM_DOWNLOAD_PROXY}
+        - KEY_CLOAK_CLIENT_SECRET=${KEY_CLOAK_CLIENT_SECRET}
+        - KEY_CLOAK_CLIENT_ID=${KEY_CLOAK_CLIENT_ID}
+        - KEY_CLOAK_ISSUER=${KEY_CLOAK_ISSUER}
+        - NEXTAUTH_URL=${NEXTAUTH_URL}
+        - NEXT_PUBLIC_CORDRA_HANDLE=${CORDRA_HANDLE}
+        - NEXT_PUBLIC_SHOWCASE_LEFT_PID=${NEXT_PUBLIC_SHOWCASE_LEFT_PID}
+        - NEXT_PUBLIC_SHOWCASE_RIGHT_PID=${NEXT_PUBLIC_SHOWCASE_RIGHT_PID}
+        - NEXT_PUBLIC_SHOWCASE_LEFT_MDPID=${NEXT_PUBLIC_SHOWCASE_LEFT_MDPID}
+        - NEXT_PUBLIC_SHOWCASE_RIGHT_MDPID=${NEXT_PUBLIC_SHOWCASE_RIGHT_MDPID}
+    environment:
+      NEXTAUTH_URL: "${NEXTAUTH_URL}"
+    expose:
+      - 8000
+    networks:
+      - hs-network
+networks:
+  hs-network:
+    name: "${COMPOSE_PROJECT_NAME}-hs-network"
+    external: true
+volumes:
+  m2:

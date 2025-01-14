@@ -1,0 +1,470 @@
+openapi: "3.1.0"
+info:
+  version: '0.1'
+  title: 'FDO Manager Service API'
+  description: "The FDO Manager Service API for creating FAIR Digital Objects."
+  contact:
+    name: IndiScale GmbH
+    email: t.fitschen@indiscale.com
+    url: "https://www.indiscale.com"
+
+servers:
+  - url: "http://localhost:8080"
+
+tags:
+  - name: Repositories
+    description: Repositories for storing FDO data and metadata.
+  - name: Profiles
+    description: FDO Profiles specify the attributes of FDOs.
+  - name: Logging
+    description: Logging of operations handled by this FDO Manager Service Instance.
+  - name: FDOs
+    description: Fair Digital Objects.
+  - name: Info
+    description: General information about the Service.
+paths:
+  /logging:
+    get:
+      tags:
+        - Logging
+      description: "List latest log events"
+      operationId: listLogEvents
+      parameters:
+        - in: query
+          name: "page[number]"
+          schema:
+            type: integer
+            default: 0
+        - in: query
+          name: "page[size]"
+          schema:
+            type: integer
+            default: 100
+      responses:
+        "200":
+          description: "Success."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/OperationsLogRecord'
+                  links:
+                    $ref: '#/components/schemas/PaginationLinks'
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
+  /profiles:
+    get:
+      tags:
+        - Profiles
+      description: "List known profiles."
+      operationId: listProfiles
+      responses:
+        "200":
+          description: "Success."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Profile'
+                  links:
+                    $ref: '#/components/schemas/Links'
+  /profiles/{profileId}:
+    get:
+      tags:
+        - Profiles
+      description: "Get information on a single profile."
+      operationId: getProfile
+      parameters:
+        - name: profileId
+          in: path
+          description: "Profile ID"
+          required: true
+          schema:
+            $ref: '#/components/schemas/ProfileID'
+      responses:
+        "200":
+          description: "Success."
+          content:
+            application/json:
+              schema:
+                type: object
+                required: ["data"]
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Profile'
+                  links:
+                    $ref: '#/components/schemas/Links'
+        "404":
+          description: "Unknown profile id."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /hello:
+    get:
+      tags:
+        - Info
+      description: Say hello to the server.
+      operationId: hello
+      responses:
+        "200":
+          description: A hello from the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hello'
+  /info:
+    get:
+      tags:
+        - Info
+      description: Retrieve general information on the service.
+      operationId: getInfo
+      responses:
+        "200":
+          description: General service information.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: ["data"]
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Info"
+                  links:
+                    $ref: '#/components/schemas/Links'
+  /repositories:
+    get:
+      tags:
+        - Repositories
+      description: "List trusted repositories."
+      operationId: listRepositories
+      responses:
+        "200":
+          description: "Success."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Repository'
+                  links:
+                    $ref: '#/components/schemas/Links'
+  /repositories/{repositoryId}:
+    get:
+      tags:
+        - Repositories
+      description: "Get information on a single repository."
+      operationId: getRepository
+      parameters:
+        - name: repositoryId
+          in: path
+          description: "Repository ID"
+          required: true
+          schema:
+            $ref: '#/components/schemas/RepositoryID'
+      responses:
+        "200":
+          description: "Success."
+          content:
+            application/json:
+              schema:
+                type: object
+                required: ["data"]
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Repository'
+                  links:
+                    $ref: '#/components/schemas/Links'
+        "404":
+          description: "Unknown repository id."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /fdo:
+    post:
+      tags:
+        - FDOs
+      description: "Create an FDO."
+      operationId: createFDO
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: ["repositories", "metadata"]
+              properties:
+                repositories:
+                  $ref: "#/components/schemas/TargetRepositories"
+                data:
+                  type: string
+                  format: binary
+                metadata:
+                  type: string
+                  format: binary
+                dataUrl:
+                  type: string
+                  format: uri
+                metadataProfile:
+                  type: string
+                fdoType:
+                  type: string
+      responses:
+        "201":
+          description: "The Location header points to the newly created FDO."
+  /fdo/{prefix}/{suffix}:
+    get:
+      tags:
+        - FDOs
+      description: "Resolve a pid."
+      operationId: "resolvePID"
+      parameters:
+        - $ref: '#/components/parameters/Prefix'
+        - $ref: '#/components/parameters/Suffix'
+      responses:
+        "200":
+          description: "A successfully resolved pid."
+          content:
+            application/json:
+              schema:
+                type: object
+                required: ["data"]
+                properties:
+                  data:
+                    $ref: '#/components/schemas/DigitalObject'
+                  links:
+                    $ref: '#/components/schemas/Links'
+        "404":
+          description: "Could not resolve pid."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - FDOs
+      description: "Delete an FDO."
+      operationId: baseDelete
+      parameters:
+        - $ref: '#/components/parameters/Prefix'
+        - $ref: '#/components/parameters/Suffix'
+        - $ref: '#/components/parameters/Purge'
+        - $ref: '#/components/parameters/DeleteMetadata'
+      responses:
+        "204":
+          description: "FDO deleted successfully."
+        "404":
+          description: "Could not resolve pid."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    OperationsLogRecord:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          const: "OperationsLogRecord"
+        attributes:
+          type: object
+          properties:
+            operation:
+              type: string
+              enum: ["Op.Create", "Op.Delete"]
+            timestamp:
+              type: string
+              format: date-time
+            repositories:
+              $ref: '#/components/schemas/TargetRepositories'
+            fdo:
+              $ref: '#/components/schemas/DigitalObject'
+        links:
+          $ref: '#/components/schemas/SelfLink'
+    TargetRepositories:
+      type: object
+      properties:
+        fdo:
+          description: "ID of the repository where you want to store the FDO"
+          type: string
+        metadata:
+          description: "ID of the repository where you want to store the metadata"
+          type: string
+        data:
+          description: "ID of the repository where you want to store the data"
+          type: string
+    SelfLink:
+      type: object
+      properties:
+        self:
+          type: string
+          nullable: true
+    PaginationMeta:
+      type: object
+      properties:
+        items_total:
+          type: number
+          format: int32
+    PaginationLinks:
+      type: object
+      properties:
+        self:
+          type: string
+          format: uri
+        first:
+          type: string
+          format: uri
+        prev:
+          type: string
+          format: uri
+        next:
+          type: string
+          format: uri
+        last:
+          type: string
+          format: uri
+    Links:
+      type: object
+      properties:
+        self:
+          type: string
+          nullable: true
+        collection:
+          type: string
+          nullable: true
+    Error:
+      type: object
+      required: ["detail", "status"]
+      properties:
+        detail:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+    RepositoryID:
+      type: string
+      examples:
+        - "gwdg-cordra-1"
+        - "fdo.indiscale.com"
+        - "b2share@gwdg"
+    Repository:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/RepositoryID'
+        type:
+          type: string
+          enum: ["repositories"]
+        attributes:
+          type: object
+          properties:
+            type:
+              type: string
+            description:
+              type: string
+            maintainer:
+              type: string
+            attributes:
+              type: object
+              additionalProperties: true
+        links:
+          $ref: '#/components/schemas/Links'
+    ProfileID:
+      type: string
+    Profile:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ProfileID'
+        attributes:
+          type: object
+          properties:
+            pid:
+              type: string
+            description:
+              type: string
+        links:
+          $ref: '#/components/schemas/Links'
+    Hello:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Hello marie.curie@sorbonne-universite.fr. This is FDO Manager Service v0.1-SNAPSHOT/API v0.1'
+          default: 'Hello anonymous. This is FDO Manager Service v0.1-SNAPSHOT/API v0.1'
+    DigitalObject:
+      type: object
+      required: ["pid", "isFdo"]
+      properties:
+        pid:
+          type: string
+        isFdo:
+          type: boolean
+        dataPid:
+          type: string
+        metadataPid:
+          type: string
+        fdoType:
+          type: string
+        fdoProfile:
+          type: string
+        attributes:
+          type: object
+          additionalProperties: true
+    Info:
+      type: object
+      properties:
+        fdoServiceVersion:
+          type: string
+        fdoSdkVersion:
+          type: string
+        serviceProvider:
+          type: string
+        links:
+          $ref: '#/components/schemas/SelfLink'
+  parameters:
+    Prefix:
+      name: prefix
+      in: path
+      description: "Persistent Identifier Prefix"
+      required: true
+      schema:
+        type: string
+    Suffix:
+      name: suffix
+      in: path
+      description: "Persistent Identifier Suffix"
+      required: true
+      schema:
+        type: string
+    Purge:
+      name: purge
+      in: query
+      description: "Indicates that the record should be purged."
+      required: false
+      schema:
+        type: boolean
+        default: false
+    DeleteMetadata:
+      name: delete_MD
+      in: query
+      description: "Indicates that metadata should also be deleted."
+      required: false
+      schema:
+        type: boolean
+        default: false

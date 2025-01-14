@@ -1,0 +1,5 @@
+fdo_manager_service_api_client
+pytest
+pytest-dependency
+pytest-order
+requests

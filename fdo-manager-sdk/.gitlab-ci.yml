@@ -1,0 +1,69 @@
+image: maven:latest
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_REF_NAME != $CI_COMMIT_TA
+
+variables:
+  MAVEN_CLI_OPTS: "-s.m2/settings.xml --batch-mode"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  GIT_SUBMODULE_STRATEGY: "recursive"
+  GIT_SUBMODULE_FORCE_HTTPS: "true"
+
+cache:
+  paths:
+    - .m2/repository/
+    - target/
+
+format:
+  allow_failure: true
+  stage: build
+  script:
+    - mvn $MAVEN_CLI_OPTS fmt:check
+
+build:
+  needs:
+    - format
+  stage: build
+  script:
+    - mvn $MAVEN_CLI_OPTS compile
+
+test:
+  needs: []
+  stage: test
+  script:
+    - mvn $MAVEN_CLI_OPTS test
+
+int-test:
+  needs: []
+  image: docker:27.1
+  stage: test
+  before_script:
+    - apk add make
+  script:
+    - cd fdo-local-testbed/
+    - docker ps
+    - make clean
+    - source linkahead/.env
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker pull $LINKAHEAD_IMAGE
+    - export CORDRA_HTTPS_PORT=9443
+    - make start_handle_system start_linkahead start_cordra
+    - cd ../
+    - cp fdo-local-testbed/fdo-manager/repositories/.test.* .
+    - docker run --network host -v ./:/run -w "/run/" maven:latest mvn $MAVEN_CLI_OPTS $MAVEN_OPTS test
+  after_script:
+    - docker ps
+    - cd fdo-local-testbed/linkahead
+    - docker compose logs
+    - cd ../cordra
+    - docker compose logs
+    - cd ../
+    - make stop
+
+deploy:
+  stage: deploy
+  script:
+    - mvn $MAVEN_CLI_OPTS deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main' && $CI_SERVER_HOST == 'gitlab.indiscale.com'

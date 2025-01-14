@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aas-fdo-adapter"
+version = "0.0.1"
+dependencies = [
+    "basyx-python-sdk @ git+https://github.com/rwth-iat/basyx-python-sdk",
+]
+authors = [
+  { name="Igor Garmaev", email="i.garmaev@iat.rwth-aachen.de" },
+]
+description = "Simple ObjectStore adapter for basyx-python-sdk to generate FDO from AAS"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/rwth-iat/aas-fdo-adapter"

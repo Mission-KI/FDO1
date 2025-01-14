@@ -1,0 +1,6 @@
+AUTHENTICATE PUBKEY:300:TEST/ADMIN
+/hs/templates/admpriv.bin
+
+CREATE TEST/linkahead
+1 0.TYPE/DOIPServiceInfo 86400 1110 FILE /hs/linkahead.serviceinfo.json
+2 URL 86400 1110 FILE /hs/tools/linkahead.url

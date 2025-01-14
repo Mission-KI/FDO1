@@ -1,0 +1,52 @@
+image: maven:latest
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_REF_NAME != $CI_COMMIT_TA
+
+variables:
+  MAVEN_CLI_OPTS: "--batch-mode"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+stages:
+  - build
+  - test
+  - package
+  - upload
+
+cache:
+  paths:
+    - .m2/repository/
+    - application/target/
+    - api/target/
+
+build:
+  stage: build
+  script:
+    - mvn $MAVEN_CLI_OPTS compile
+
+test:
+  stage: test
+  script:
+    - mvn $MAVEN_CLI_OPTS test
+
+package:
+  stage: package
+  script:
+    - mvn $MAVEN_CLI_OPTS package
+    - mkdir dist
+    - mv application/target/*.jar dist/
+  artifacts:
+    paths:
+      - dist/
+
+upload:
+  needs:
+    - job: package
+      artifacts: true
+  stage: upload
+  script:
+    - VERSION="$(mvn $MAVEN_CLI_OPTS org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout)"
+    - 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file dist/fdo-manager-service.application-${VERSION}.jar "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/fdo-manager-service/${VERSION}/fdo-manager-service.${VERSION}.jar"'
+  only:
+    - main

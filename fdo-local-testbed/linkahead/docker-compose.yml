@@ -1,0 +1,44 @@
+services:
+  sqldb:
+    container_name: "${COMPOSE_PROJECT_NAME}-linkahead-backend"
+    image: mariadb:10.4
+    environment:
+      MYSQL_ROOT_PASSWORD: caosdb1234
+  linkahead:
+    container_name: "${COMPOSE_PROJECT_NAME}-linkahead"
+    image: "${LINKAHEAD_IMAGE}"
+    user: 999:999
+    depends_on:
+      - sqldb
+    volumes:
+      - type: bind
+        source: ./cert
+        target: /opt/caosdb/cert
+      - type: bind
+        source: ./conf/ext/server.conf.d
+        target: /opt/caosdb/git/caosdb-server/conf/ext/server.conf.d
+      - type: bind
+        source: ./conf/ext/jwks
+        target: /opt/caosdb/git/caosdb-server/conf/ext/jwks
+      - type: bind
+        source: ./scripting/home
+        target: /opt/caosdb/git/caosdb-server/scripting/home
+      - type: bind
+        source: ../test-handle-system/.handle
+        target: /opt/caosdb/.handle
+    ports:
+      - "${LINKAHEAD_HTTPS_PORT}:10443"
+      - "${LINKAHEAD_HTTP_PORT}:10080"
+      - "${LINKAHEAD_DOIP_PORT}:8888"
+    environment:
+      DEBUG: 0
+      CAOSDB_CONFIG_AUTH_OPTIONAL: "TRUE"
+      JAVA_TOOL_OPTIONS: "-Dnet.handle.configDir=/opt/caosdb/.handle"
+      CAOSDB_CONFIG_CERTIFICATES_KEY_STORE_PATH: "/opt/caosdb/cert/keystore.jks"
+      CAOSDB_CONFIG_CERTIFICATES_KEY_PASSWORD: "$LINKAHEAD_CERTIFICATES_KEY_PASSWORD"
+      CAOSDB_CONFIG_CERTIFICATES_KEY_STORE_PASSWORD: "$LINKAHEAD_CERTIFICATES_KEY_PASSWORD"
+      CAOSDB_CONFIG_DOIP_SERVICE_ID: "$LINKAHEAD_DOIP_SERVICE_ID"
+      CAOSDB_CONFIG_DOIP_SERVICE_HOST: "$LINKAHEAD_DOIP_SERVICE_HOST_IP"
+      CAOSDB_CONFIG_DOIP_SERVICE_PORT: "$LINKAHEAD_DOIP_PORT"
+      CAOSDB_CONFIG_PID_RECORD_URL_BASE: "http://${LINKAHEAD_DOIP_SERVICE_HOST_IP}:${LINKAHEAD_HTTP_PORT}"
+

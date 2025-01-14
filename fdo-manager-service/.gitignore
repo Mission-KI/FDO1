@@ -1,0 +1,6 @@
+.classpath
+.settings/
+.project
+.m2/
+target/
+repositories/*

@@ -1,0 +1,27 @@
+{
+  "@id": "4e567a37-150b-494b-994e-5470435bc700",
+  "@type": "dcat:Catalog",
+  "dcat:dataset": {
+    "@id": "myAssetId2",
+    "@type": "dcat:Dataset",
+    "edc:name": "Product EDC Demo Asset",
+    "edc:description": "Product Description about Test Asset",
+    "edc:isFdo": "true",
+    "edc:id": "myAssetId2",
+    "edc:contenttype": "application/json"
+  },
+  "dcat:service": {
+    "@id": "373159a3-29e3-4ff2-875b-f11ecf035375",
+    "@type": "dcat:DataService",
+    "dct:terms": "connector",
+    "dct:endpointUrl": "http://localhost:11003/api/dsp"
+  },
+  "edc:participantId": "MDSLENEWB0.C33384T",
+  "@context": {
+    "dct": "https://purl.org/dc/terms/",
+    "edc": "https://w3id.org/edc/v0.0.1/ns/",
+    "dcat": "https://www.w3.org/ns/dcat/",
+    "odrl": "http://www.w3.org/ns/odrl/2/",
+    "dspace": "https://w3id.org/dspace/v0.8/"
+  }
+}

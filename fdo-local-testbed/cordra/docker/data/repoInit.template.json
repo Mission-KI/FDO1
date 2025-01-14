@@ -1,0 +1,133 @@
+{
+  "baseUri": "http://CORDRA_HOST_IP:CORDRA_HTTP_PORT/",
+  "prefix": "TEST.CORDRA",
+  "adminPassword": "cordra",
+  "design": {
+    "authConfig": {
+      "schemaAcls": {
+        "User": {
+          "defaultAclRead": [
+            "authenticated"
+          ],
+          "defaultAclWrite": [
+            "self"
+          ],
+          "aclCreate": []
+        },
+        "CordraDesign": {
+          "defaultAclRead": [
+            "public"
+          ],
+          "defaultAclWrite": [],
+          "aclCreate": []
+        },
+        "Schema": {
+          "defaultAclRead": [
+            "public"
+          ],
+          "defaultAclWrite": [],
+          "aclCreate": []
+        }
+      },
+      "defaultAcls": {
+        "defaultAclRead": [
+          "public"
+        ],
+        "defaultAclWrite": [
+          "creator"
+        ],
+        "aclCreate": [
+          "authenticated"
+        ]
+      }
+    },
+    "uiConfig": {
+      "title": "FDO Local Testbed",
+      "relationshipsButtonText": "Show Relationships",
+      "allowUserToSpecifySuffixOnCreate": true,
+      "searchResults": {
+        "includeType": true,
+        "includeModifiedDate": true,
+        "includeCreatedDate": true
+      },
+      "initialQuery": "*:*",
+      "initialFragment": "#",
+      "initialSortFields": "/name",
+      "navBarLinks": [
+        {
+          "type": "url",
+          "title": "Get Started",
+          "url": "intro.html"
+        },
+        {
+          "type": "about",
+          "title": "About"
+        },
+        {
+          "type": "url",
+          "title": "API Docs",
+          "url": "openapi/index.html"
+        },
+        {
+          "type": "query",
+          "title": "All Objects",
+          "query": "*:*",
+          "sortFields": "metadata/modifiedOn DESC"
+        },
+        {
+          "type": "typeDropdown",
+          "title": "Show Only",
+          "maxItems": 15
+        },
+        {
+          "type": "typeObjectsDropdown",
+          "title": "Types",
+          "maxItems": 15
+        }
+      ],
+      "numTypesForCreateDropdown": 15,
+      "aclUiSearchTypes": [
+        "User",
+        "Group"
+      ]
+    },
+    "handleServerConfig": {
+      "enabled": true,
+      "externalAddress": "CORDRA_HOST_IP"
+    },
+    "handleMintingConfig": {
+      "prefix": "TEST.CORDRA",
+      "baseUri": "http://CORDRA_HOST_IP:CORDRA_HTTP_PORT/",
+      "javascript": "const cordra = require(\"cordra\");\n\nexports.createHandleValues = createHandleValues;\n\nfunction createHandleValues(object, context) {\n\t// Information from the design object regarding the handleMintingConfig are extracted here\n    const handleMintingConfig = cordra.get(\"design\").content.handleMintingConfig;\n\tconst url = handleMintingConfig.baseUri;\n\tconst id = object.id;\n    \n\t// Start the index for custom fields at 2 to leave index 1 for the loc parameter.\n    var index = 2;\n    \n\t// The values for HS_ADMIN and for 10320/loc need to be created by hand,\n\t// all necessary information are extracted from the design object.\n\tconst handleValues = [\n\t    {\n\t    \"index\": 1,\n\t\t\"type\":\"10320/loc\",\n\t\t\"data\": {\n\t\t    \"format\":\"string\",\n\t\t    \"value\": extractLocParameter(handleMintingConfig, url, id, object.payloads)\n    \t    }\n    \t}\n\t];\n\n\t// Here we iterate through all key-value pairs of the object and create entries in the handle record\n\t// We have to check if the object is set to \"public\", otherwise information about objects that\n\t// require authentication to view will be published in the handle record\n\tif(isPublic(context) && object.type != \"Schema\") {\n\t\tfor(const [key, value] of Object.entries(object.content)){\n\t\t    console.log(key, value);\n\t\t    console.log(typeof value);\n\t\t\thandleValues.push({\n\t\t\t\t\"index\": index,\n\t\t\t\t\"type\": key,\n\t\t\t\t\"data\": {\n    \t\t\t\t\"format\": \"string\",\n    \t\t\t\t\"value\": JSON.stringify(value).replace(/\\\"/g, \"\")\n\t\t\t\t}\n\t\t\t});\n\t\t\tindex +=1;\n\t\t\t//Safeguard for very long objects because index 100 is occupied by HS_ADMIN\n\t\t\tif(index==100){\n\t\t\t\tindex +=1;\n\t\t\t}\n\t\t}   \n\t}\n\treturn handleValues;\n}\n\n// Function to construct the 10320/loc parameter, information from the defaultLinks field\n// of the design object.\nfunction extractLocParameter(handleMintingConfig, url, id, payloads) {\n\tvar locationString = \"<locations>\";\n\thandleMintingConfig.defaultLinks.forEach(function(defaultLink){\n    var weight = defaultLink.primary == true ? \"1\" : \"0\";\n    var tmpString = `<location href=\"${url}`;\n    switch(defaultLink.type) {\n        case \"json\":\n            tmpString +=`objects/${id}\" weight=\"${weight}\" view=\"json\" />`;\n            locationString += \"\\n\" + tmpString;\n            break;\n        case \"ui\":\n            tmpString +=`#objects/${id}\" weight=\"${weight}\" view=\"ui\" />`;\n            locationString += \"\\n\" + tmpString;\n            break;\n        case \"payload\":\n            if(payloads) {\n                payloads.forEach((pl, index) => {\n                    if (!defaultLink.all && index > 0) {\n                        return;\n                    }\n                    var name = encodeURIComponent(pl.name);\n                    locationString += \"\\n\" + `<location href=\"${url}objects/${id}?payload=${name}\" view=\"${pl.name}\" weight=\"0\" payloadIndex=\"${index}\" />`;\n                });\n            }\n            break;\n    }\n\t});\n    return locationString += \"\\n\" + \"</locations>\";\n}\n\n//Function to check if an object is public, the ACL can be extracted from the context parameter\nfunction isPublic(context) {\n\tconst effectiveAcl = context.effectiveAcl;\n\tif (effectiveAcl.writers && effectiveAcl.writers.indexOf(\"public\") !== -1) {\n\t\treturn true;\n\t} else if (effectiveAcl.readers && effectiveAcl.readers.indexOf(\"public\") !== -1) {\n\t\treturn true;\n\t} else {\n\t\treturn false;\n\t}\n}\n",
+      "defaultLinks": [
+        {
+          "type": "json",
+          "primary": false
+        },
+        {
+          "type": "ui",
+          "primary": true
+        },
+        {
+          "type": "payload",
+          "primary": false,
+          "all": true
+        }
+      ],
+      "ignoreHandleErrors": false,
+      "omitDoipServiceHandleValue": false
+    },
+    "doip": {
+      "enabled": true,
+      "port": 9000,
+      "listenAddresses": [],
+      "backlog": 50,
+      "maxIdleTimeMillis": 300000,
+      "numThreads": 20,
+      "processorConfig": {
+        "address": "CORDRA_HOST_IP"
+      }
+    },
+    "javascript": "const cordra = require('cordra');\nconst cordraUtil = require('cordraUtil');\n\nlet providerPublicKey = {\n  \"kty\": \"RSA\",\n  \"n\": \"rDeUXJt-Dg9nHRO85w03pG-P97vQJMjdi0cy1CfnaYEU-DKKmG7xyCGZ1MryZLAWm-P6UthYOEH6YPO1rVhyoIBbjKR40AOVrkP4wNLZYGClkCxNKVSR5cpugWTfQfYHViy87WwePbetoR6RfBkDBZCtn14pIG2exo9KHJaP2-3EdSdTjr6vs24PtJUk5ZlyIHgpQyIoP3rsi8TD208clRfzJfDAvMwcKR_15D4-R9u4Wil62YFM98RoPQj3RnkRwbIseZto6MvOGUXodZcV5bnZAzDXi6wN-yTmK5bmqYg8zEiZ9i5KzVL1sVtXbxpJZUPgjbC4ZlNRh5fl-G61gw\",\n  \"e\": \"AQAB\",\n  \"alg\": \"RS256\",\n  \"use\": \"sig\", \"x5c\":[\"MIICozCCAYsCBgGSq/6IdzANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDDApGZG9UZXN0YmVkMB4XDTI0MTAyMDIyMTIxOFoXDTM0MTAyMDIyMTM1OFowFTETMBEGA1UEAwwKRmRvVGVzdGJlZDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKw3lFybfg4PZx0TvOcNN6Rvj/e70CTI3YtHMtQn52mBFPgyiphu8cghmdTK8mSwFpvj+lLYWDhB+mDzta1YcqCAW4ykeNADla5D+MDS2WBgpZAsTSlUkeXKboFk30H2B1YsvO1sHj23raEekXwZAwWQrZ9eKSBtnsaPShyWj9vtxHUnU46+r7NuD7SVJOWZciB4KUMiKD967IvEw9tPHJUX8yXwwLzMHCkf9eQ+PkfbuFopetmBTPfEaD0I90Z5EcGyLHmbaOjLzhlF6HWXFeW52QMw14usDfsk5iuW5qmIPMxImfYuSs1S9bFbV28aSWVD4I2wuGZTUYeX5fhutYMCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAI6oOSsWQYxU6tLMVwHaM99PxBty3udhnHefiEcyJpffw4YLnIMy9nZhoLMgE/51QNOhq18kFO/COvvlig/fJXIDyrX6h0s4wKzKixbLpOh4Bm2z5faPirGE1qbgZJkoMNn2WJGSPG3kxQkQJkshFCyty3doV6268b1XNpFN+G/ia8dLL65PYrGob5JoqnOtodaJ/gl6jgnv7peDiQ/YJyt2MvhNUndlx2Vo0T/aEno967XDL8gi5qVF8IDCvg3ToxKMgK8RtHr1I+xkBOdWpPTkZ743fvWjcPec4F2j38dFQ7e7EzscxBuRoYko+lS7i9uWTAvzpSRmd83EFsdF+HQ==\"],\"x5t\":\"L6_SjWxV6m5wHDgbfQoFMc8w1xs\",\"x5t#S256\":\"KPR4oJFCh7JvRvWG4hJDhJnZO1kqpuMgB3am-GVGTWc\"\n};\n\nexports.authenticate = authenticate;\n\nfunction authenticate(authInfo, context) {\n    if (isTokenAuthentication(authInfo)) {\n        return checkCredentials(authInfo);\n    } else {\n        return null;\n    }\n}\n\nfunction isTokenAuthentication(authInfo) {\n    if (authInfo.token) {\n        if (isJwtFromProvider(authInfo.token)) {\n            return true;\n        }\n    }\n    return false;\n}\n\nfunction isJwtFromProvider(token) {\n    if (!token.includes(\".\")) {\n        return false;\n    }\n    try {\n        const claims = cordraUtil.extractJwtPayload(token);\n        return \"KEY_CLOAK_ISSUER\" === claims.iss;\n    } catch (error) {\n        return false;\n    }\n}\n\nfunction checkCredentials(authInfo) {\n    const token = authInfo.token;\n    const payload = cordraUtil.extractJwtPayload(token);\n    const isVerified = cordraUtil.verifyWithKey(token, providerPublicKey);\n    const claimsCheck = checkClaims(payload);\n    const active = isVerified && claimsCheck;\n    const result = {\n        active: active\n    };\n    if (active) {\n        result.userId = payload.sub;\n        if (payload.name) {\n            result.username = payload.name;\n        }\n        if (payload.groupIds) {\n            result.groupIds = payload.groupIds;\n        }\n        if (payload.exp) {\n            result.exp = payload.exp + 8000000;\n        }\n        result.grantAuthenticatedAccess = true;\n    }\n    return result;\n}\n\nfunction isBasicAuth(authHeader) {\n    return authHeader.startsWith(\"Basic \");\n}\n\nfunction isBearerTokenAuth(authHeader) {\n    return authHeader.startsWith(\"Bearer \");\n}\n\nfunction getTokenFromAuthHeader(authHeader) {\n    return authHeader.substring(authHeader.indexOf(\" \") + 1);\n}\n\nfunction checkClaims(claims) {\n    if (!claims.iss || !claims.exp) {\n        return false;\n    }\n    const nowInSeconds = Math.floor(Date.now() / 1000);\n    if (nowInSeconds > claims.exp) {\n        return false;\n    }\n    return true;\n}"
+  }
+}

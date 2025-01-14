@@ -1,0 +1,17 @@
+{
+  "type": "DOIP",
+  "id": "Cordra",
+  "attributes": {
+    "username": "admin",
+    "password": "cordra",
+    "typeDo": "Document",
+    "typeFdo": "FDO",
+    "typeDataRef": "FDO_Data_Refs",
+    "typeMDRef": "FDO_MD_Refs",
+    "typeProfileRef": "FDO_Profile_Ref",
+    "host": "DOIP_HOST",
+    "port": "DOIP_PORT",
+    "serviceId": "DOIP_SERVICE_ID",
+    "publicKey": "PUBKEY"
+  }
+}
