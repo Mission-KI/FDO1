@@ -1,0 +1,65 @@
+# MIT License
+
+Copyright (c) 2025 Mission-KI
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+## Scope of License
+
+This license applies to all components of the FDO1 project, including but not limited to:
+
+### Core Components
+- fdo-manager-service
+- fdo-manager-sdk
+- fdo-manager-clients
+- fdo-doip-request-models
+
+### Adapters
+- fdo-aas-adapter
+- fdo-edc-adapter
+- fdo-doip-b2share-adapter
+- fdo-s3-doip-adapter
+
+### User Interface
+- fdo-manager-webui
+
+### Testing & Development
+- fdo-manager-e2e-tests
+- fdo-local-testbed
+- fdo-test-handle-system
+- fdo-testbed-jupyter-notebooks
+
+### Deployment
+- fdo-manager-deploy
+
+## Third-Party Dependencies
+
+While this project is licensed under the MIT License, individual dependencies may be licensed under different terms. Users should refer to the respective module documentation for specific dependency license information.
+
+## FAIR Implementation Notice
+
+While this software is MIT licensed, the implementation adheres to FAIR principles:
+- Findable: Through unique and persistent identification
+- Accessible: Via secure access and exchange mechanisms
+- Interoperable: Supporting cross-system compatibility
+- Reusable: Through sustainable data structuring
+
+## Contributing
+
+By contributing to this project, you agree that your contributions will be licensed under the MIT License. Please contact git-mission-ki@acatech.de for any questions regarding contributions or licensing.
