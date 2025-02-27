@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up environment
+        run: echo "Setting up environment"
+        # Add specific setup steps based on your project
+      
+      - name: Run linters
+        run: echo "Running linters"
+        # Add linting commands specific to your project
+      
+      - name: Run tests
+        run: echo "Running tests"
+        # Add test commands specific to your project
