@@ -1,5 +1,10 @@
 # FDO1 - Fair Digital Objects for Data Spaces
 
+<div align="center">
+  <img src="./images/mission-ki-logo.png" alt="MISSION KI Logo" height="100">
+  <img src="./images/bmdv-logo.png" alt="BMDV Logo" height="100">
+</div>
+
 Implementation of Fair Digital Objects (FDOs) for standardized data exchange between data spaces.
 
 ## Overview
