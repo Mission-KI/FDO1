@@ -5,6 +5,8 @@
   <img src="./images/bmdv-logo.png" alt="BMDV Logo" height="100">
 </div>
 
+## Goal
+
 Implementation of Fair Digital Objects (FDOs) for standardized data exchange between data spaces.
 
 ## Overview
