@@ -1,4 +1,4 @@
-# FDO1 - Fair Digital Objects for Data Spaces
+# Fair Data Publisher - Fair Digital Objects for Data Spaces
 
 <div align="center">
   <img src="./images/mission-ki-logo.png" alt="MISSION KI Logo" height="100">
